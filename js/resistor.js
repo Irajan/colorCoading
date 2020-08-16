@@ -24,6 +24,27 @@ export default class Resistor {
 
     const multiplier = 10 ** colorCode.indexOf(this.bands[2]);
 
-    console.log(base * multiplier);
+    console.log(this.calculateBands(2600));
+  }
+
+  calculateBands(value) {
+    const bands = new Array();
+
+    let i;
+    for (i = 0; i < 2; i++) bands[i] = colorCode[value.nthDigit(i)];
+
+    while (value.nthDigit(i) != null) i++;
+
+    const power = i - 2;
+    bands[2] = colorCode[power];
+
+    return bands;
   }
 }
+
+Number.prototype.nthDigit = function (nthPlace) {
+  const numbString = this.toString();
+
+  if (numbString.length <= nthPlace) return null;
+  return +numbString[nthPlace];
+};
