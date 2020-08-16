@@ -11,11 +11,22 @@ const colorCode = [
   "White",
 ];
 
+const toleranceCode = colorCode.map((color, index) => {
+  return "" + index + color;
+});
+
 export default class Resistor {
-  constructor(value) {
-    this.value = value || 0;
-    this.bands = ["Grey", "Orange", "Red"];
-    this.calculateValue();
+  constructor(value, tolerance = 0) {
+    if (value instanceof Array) {
+      this.bands = value;
+      this.value = this.calculateValue();
+    } else {
+      this.value = value;
+      this.bands = this.calculateBands();
+    }
+    this.tolerance = tolerance;
+
+    console.log(toleranceCode);
   }
 
   calculateValue() {
@@ -24,17 +35,18 @@ export default class Resistor {
 
     const multiplier = 10 ** colorCode.indexOf(this.bands[2]);
 
-    console.log(this.calculateBands(2600));
+    return base * multiplier;
   }
 
-  calculateBands(value) {
+  calculateBands() {
     const bands = new Array();
 
     let i;
-    for (i = 0; i < 2; i++) bands[i] = colorCode[value.nthDigit(i)];
+    for (i = 0; i < 2; i++) bands[i] = colorCode[this.value.nthDigit(i)];
 
-    while (value.nthDigit(i) != null) i++;
+    this.value.nthDigit(0);
 
+    while (this.value.nthDigit(i) != null) i++;
     const power = i - 2;
     bands[2] = colorCode[power];
 
