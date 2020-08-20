@@ -11,9 +11,29 @@ const colorCode = [
   "White",
 ];
 
-const toleranceCode = colorCode.map((color, index) => {
-  return "" + index + color;
-});
+const toleranceCode = {
+  Black: 0,
+  Brown: 1,
+  Red: 2,
+  Green: 0.5,
+  Blue: 0.25,
+  Violet: 0.1,
+  Grey: 0.05,
+  Gold: 5,
+  Silver: 10,
+};
+
+function getToleranceColor(value) {
+  for (let cur in toleranceCode) {
+    if (value == toleranceCode[cur]) return cur;
+  }
+}
+
+function getToleranceValue(color) {
+  for (let cur in toleranceCode) {
+    if (color == cur) return toleranceCode[cur];
+  }
+}
 
 export default class Resistor {
   constructor(value, tolerance = 0) {
@@ -25,8 +45,6 @@ export default class Resistor {
       this.bands = this.calculateBands();
     }
     this.tolerance = tolerance;
-
-    console.log(toleranceCode);
   }
 
   calculateValue() {
@@ -49,6 +67,8 @@ export default class Resistor {
     while (this.value.nthDigit(i) != null) i++;
     const power = i - 2;
     bands[2] = colorCode[power];
+
+    bands[3] = getToleranceColor(this.tolerance);
 
     return bands;
   }
